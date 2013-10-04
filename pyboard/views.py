@@ -53,13 +53,16 @@ def dashboard(course = None):
 		grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
 		assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
 		title = 'Dashboard'
+		navkey = 'dashboard'
 	else:
 		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		title = g.course['displayname'] + ' Dashboard'
+		navkey = g.course['name'] + '-dashboard'
 
 	return flask.render_template('dashboard.html',
 		title=title,
+		navkey=navkey,
 		courses=courses,
 		grades=grades,
 		assignments=assignments)
