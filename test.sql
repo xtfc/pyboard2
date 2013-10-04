@@ -3,8 +3,8 @@ INSERT INTO users(username, name, email) VALUES('jess', 'Jessica', 'jess@pyboard
 INSERT INTO users(username, name, email) VALUES('tyler', 'Tyler', 'tyler@pyboard.com');
 INSERT INTO users(username, name, email) VALUES('phil', 'Philip', 'phil@pyboard.com');
 
-INSERT INTO courses(name) VALUES('CS 140');
-INSERT INTO courses(name) VALUES('CS 320');
+INSERT INTO courses(name, displayname) VALUES('cs140','CS 140');
+INSERT INTO courses(name, displayname) VALUES('cs320','CS 320');
 
 INSERT INTO entries(uid, cid, level) VALUES(1, 1, 1); -- John is a CA for CS 140
 INSERT INTO entries(uid, cid, level) VALUES(1, 2, 0); -- John is a student for CS 320

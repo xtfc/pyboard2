@@ -9,7 +9,8 @@ CREATE TABLE users (
 drop table if exists courses;
 CREATE TABLE courses (
 	cid INTEGER PRIMARY KEY AUTOINCREMENT,
-	name TEXT NOT NULL
+	name TEXT UNIQUE NOT NULL,
+	displayname TEXT NOT NULL
 );
 
 DROP TABLE IF EXISTS entries;
