@@ -47,25 +47,22 @@ def teardown(exception):
 @app.route('/course/<course>')
 @requires_auth
 def dashboard(course = None):
+	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
+
 	if course is None:
-		courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 		grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
 		assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
-
-		return flask.render_template('dashboard.html',
-			title='Dashboard',
-			courses=courses,
-			grades=grades,
-			assignments=assignments)
-
+		title = 'Dashboard'
 	else:
 		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
+		title = g.course['displayname'] + ' Dashboard'
 
-		return flask.render_template('dashboard.html',
-			title=g.course['displayname'] + ' Dashboard',
-			grades=grades,
-			assignments=assignments)
+	return flask.render_template('dashboard.html',
+		title=title,
+		courses=courses,
+		grades=grades,
+		assignments=assignments)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
