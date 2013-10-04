@@ -27,10 +27,15 @@ def requires_auth(func):
 @app.before_request
 def setup():
 	g.db = Database(app.config['DATABASE'])
+	g.user = None
+	g.course = None
+
 	if 'username' in session:
-		g.user = g.db.queryone('SELECT uid FROM users WHERE username=:username', username=session['username'])
-	else:
-		g.user = None
+		g.user = g.db.queryone('SELECT * FROM users WHERE username=:username', username=session['username'])
+
+	if request.view_args:
+		if 'course' in request.view_args:
+			g.course = g.db.queryone('SELECT * FROM courses WHERE name=:course', course=request.view_args['course'])
 
 @app.teardown_request
 def teardown(exception):
@@ -52,18 +57,15 @@ def dashboard(course = None):
 			courses=courses,
 			grades=grades,
 			assignments=assignments)
+
 	else:
-		pass
+		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
+		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 
-@app.route('/grades')
-@requires_auth
-def grades():
-	pass
-
-@app.route('/courses')
-@requires_auth
-def courses():
-	pass
+		return flask.render_template('dashboard.html',
+			title=g.course['displayname'] + ' Dashboard',
+			grades=grades,
+			assignments=assignments)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

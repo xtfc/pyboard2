@@ -4,50 +4,53 @@
 		<div class="pure-menu pure-menu-open pure-menu-horizontal">
 			<ul>
 				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-				<li><a href="{{ url_for('grades') }}">Grades</a></li>
-				<li><a href="{{ url_for('grades') }}">Courses</a></li>
 				<li><a href="{{ url_for('logout') }}">{{ session['username'] }}</a></li>
 			</ul>
 		</div>
 	</nav>
-	<div id="grades" class="pure-u-1-2">
-		<h3>Grades</h3>
-		<table class="pure-table pure-table-bordered pure-table-striped">
-			<thead>
-				<tr>
-					<th>Owner</th>
-					<th>Assignment</th>
-					<th>Score</th>
-					<th>Possible</th>
-					<th>CID</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for grade in grades %}
+	{% if grades %}
+		<div id="grades" class="pure-u-1-2">
+			<h3>Grades</h3>
+			<table class="pure-table pure-table-bordered pure-table-striped">
+				<thead>
 					<tr>
-						<td>{{ grade['T2.username'] }}</td>
-						<td>{{ grade['T1.name'] }}</td>
-						<td>{{ grade['T1.score'] }}</td>
-						<td>{{ grade['T1.points'] }}</td>
-						<td>{{ grade['T1.cid'] }}</td>
+						<th>Owner</th>
+						<th>Assignment</th>
+						<th>Score</th>
+						<th>Possible</th>
+						<th>CID</th>
 					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<div id="courses" class="pure-u-1-2">
-		<h3>Courses</h3>
-		<ul>
-			{% for course in courses %}
-				<li><a href="{{ url_for('dashboard', course=course['name']) }}">{{ course['displayname'] }}</a> ({{ course['level'] }})</li>
-			{% endfor %}
-		</ul>
-	</div>
-	<div id="assignments" class="pure-u-1-2">
-		<h3>Assignments</h3>
+				</thead>
+				<tbody>
+					{% for grade in grades %}
+						<tr>
+							<td>{{ grade['T2.username'] }}</td>
+							<td>{{ grade['T1.name'] }}</td>
+							<td>{{ grade['T1.score'] }}</td>
+							<td>{{ grade['T1.points'] }}</td>
+							<td>{{ grade['T1.cid'] }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+	{% if assignments %}
+		<div id="assignments" class="pure-u-1-2">
+			<h3>Assignments</h3>
 			{% for assignment in assignments %}
 				<li>{{ assignment['name'] }} for CID {{ assignment['cid'] }}</li>
 			{% endfor %}
-		</ul>
-	</div>
+		</div>
+	{% endif %}
+	{% if courses %}
+		<div id="courses" class="pure-u-1-2">
+			<h3>Courses</h3>
+			<ul>
+				{% for course in courses %}
+					<li><a href="{{ url_for('dashboard', course=course['name']) }}">{{ course['displayname'] }}</a> ({{ course['level'] }})</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
 {% endblock %}
