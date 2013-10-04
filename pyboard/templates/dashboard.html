@@ -10,8 +10,44 @@
 			</ul>
 		</div>
 	</nav>
-	<div id="content" class="pure-u-1">
-		<h1>{{ title }}</h1>
-		{{ content|markdown }}
+	<div id="grades" class="pure-u-1-2">
+		<h3>Grades</h3>
+		<table class="pure-table pure-table-bordered pure-table-striped">
+			<thead>
+				<tr>
+					<th>Owner</th>
+					<th>Assignment</th>
+					<th>Score</th>
+					<th>Possible</th>
+					<th>CID</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for grade in grades %}
+					<tr>
+						<td>{{ grade['T2.username'] }}</td>
+						<td>{{ grade['T1.name'] }}</td>
+						<td>{{ grade['T1.score'] }}</td>
+						<td>{{ grade['T1.points'] }}</td>
+						<td>{{ grade['T1.cid'] }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div id="courses" class="pure-u-1-2">
+		<h3>Courses</h3>
+		<ul>
+			{% for course in courses %}
+				<li><a href="{{ url_for('dashboard', course=course['name']) }}">{{ course['displayname'] }}</a> ({{ course['level'] }})</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="assignments" class="pure-u-1-2">
+		<h3>Assignments</h3>
+			{% for assignment in assignments %}
+				<li>{{ assignment['name'] }} for CID {{ assignment['cid'] }}</li>
+			{% endfor %}
+		</ul>
 	</div>
 {% endblock %}
