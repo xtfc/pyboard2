@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{% block title %}{{ title or 'Pyboard' }}{% endblock %}</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+		<link rel="stylesheet" type="text/css" href="/static/main.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="/static/main.js"></script>
+	</head>
+
+	<body>
+		<div id="container" class="pure-g-r">
+			{% block container %}
+				{% block messages %}
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<ul id="messages" class="pure-u-1">
+								{% for message in messages %}
+									<li>{{ message }}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					{% endwith %}
+				{% endblock %}
+
+				{% block content %}
+				{% endblock %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

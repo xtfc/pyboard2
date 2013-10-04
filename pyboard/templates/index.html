@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="pure-u-1">
+		<h1>{{ title }}</h1>
+		{{ content|markdown }}
+	</div>
+{% endblock %}
