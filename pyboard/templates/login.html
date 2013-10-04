@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+	<div id="login" class="pure-u-1">
+		<div>
+			<form class="pure-form pure-form-stacked" action="{{ url_for('login') }}" method="POST">
+				<fieldset>
+					<legend>Log In</legend>
+
+					<input type="text" name="username" placeholder="Username">
+					<input type="password" name="password" placeholder="Password">
+
+					<button type="submit" class="pure-button pure-button-primary">Log In</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
