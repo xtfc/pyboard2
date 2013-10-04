@@ -21,10 +21,20 @@ def requires_auth(func):
 
 @app.route('/')
 @requires_auth
-def index():
-	return flask.render_template('index.html',
+def dashboard():
+	return flask.render_template('dashboard.html',
 		title='Hello, world!',
 		content='Welcome to [Pyboard 2.0](https://github.com/xtfc/pyboard2)!')
+
+@app.route('/grades')
+@requires_auth
+def grades():
+	pass
+
+@app.route('/courses')
+@requires_auth
+def courses():
+	pass
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

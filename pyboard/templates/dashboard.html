@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+	<nav class="pure-u-1">
+		<div class="pure-menu pure-menu-open pure-menu-horizontal">
+			<ul>
+				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+				<li><a href="{{ url_for('grades') }}">Grades</a></li>
+				<li><a href="{{ url_for('grades') }}">Courses</a></li>
+				<li><a href="{{ url_for('logout') }}">{{ session['username'] }}</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div id="content" class="pure-u-1">
+		<h1>{{ title }}</h1>
+		{{ content|markdown }}
+	</div>
+{% endblock %}

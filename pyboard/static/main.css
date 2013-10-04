@@ -1,6 +1,7 @@
 #container {
 	display: block;
-	margin: 2em;
+	width: 60em;
+	margin: 2em auto;
 }
 
 #container > div {
@@ -11,6 +12,10 @@
 #messages {
 	padding: 0;
 	list-style: none;
+	text-align: center;
+}
+
+nav {
 	text-align: center;
 }
 
