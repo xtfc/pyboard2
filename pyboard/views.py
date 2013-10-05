@@ -55,14 +55,14 @@ def teardown(exception):
 @app.route('/course/<course>')
 @requires_auth
 def dashboard(course = None):
-	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
-
 	if course is None:
+		courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 		grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
 		assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
 		title = 'Dashboard'
 		navkey = 'dashboard'
 	else:
+		courses = g.db.query(open_sql('courses_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		title = g.course['displayname'] + ' Dashboard'

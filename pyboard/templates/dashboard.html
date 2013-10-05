@@ -17,47 +17,49 @@
 			</ul>
 		</div>
 	</nav>
-	{% if grades %}
-		<div id="grades" class="pure-u-1-2">
-			<h2>Grades</h3>
-			{% for group in grades %}
-				<h3>{{ grades[group][0]['C.displayname'] }}</h3>
-				<table class="pure-table pure-table-bordered pure-table-striped">
-					<thead>
-						<tr>
-							<th>Owner</th>
-							<th>Course</th>
-							<th>Assignment</th>
-							<th>Score</th>
-							<th>Possible</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for grade in grades[group] %}
+	{% for course in courses %}
+		{% if course['visible'] %}
+			<div class="pure-u-1">
+				<h2>{{ course['displayname'] }}</h2>
+				<hr>
+			</div>
+			{% if grades and course['name'] in grades %}
+				<div class="pure-u-1-2">
+					<h3>Grades</h3>
+					<table class="pure-table pure-table-bordered pure-table-striped">
+						<thead>
 							<tr>
-								<td>{{ grade['U.username'] }}</td>
-								<td>{{ grade['C.displayname'] }}</td>
-								<td>{{ grade['GA.name'] }}</td>
-								<td>{{ grade['GA.score'] }}</td>
-								<td>{{ grade['GA.points'] }}</td>
+								<th>Owner</th>
+								<th>Course</th>
+								<th>Assignment</th>
+								<th>Score</th>
+								<th>Possible</th>
 							</tr>
+						</thead>
+						<tbody>
+							{% for grade in grades[course['name']] %}
+								<tr>
+									<td>{{ grade['U.username'] }}</td>
+									<td>{{ grade['C.displayname'] }}</td>
+									<td>{{ grade['GA.name'] }}</td>
+									<td>{{ grade['GA.score'] }}</td>
+									<td>{{ grade['GA.points'] }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% endif %}
+			{% if assignments and course['name'] in assignments %}
+				<div id="assignments" class="pure-u-1-2">
+					<h3>Assignments</h3>
+					<ul>
+						{% for assignment in assignments[course['name']] %}
+							<li>{{ assignment['name'] }}</li>
 						{% endfor %}
-					</tbody>
-				</table>
-			{% endfor %}
-		</div>
-	{% endif %}
-	{% if assignments %}
-		<div id="assignments" class="pure-u-1-2">
-			<h2>Assignments</h3>
-			{% for group in assignments %}
-				<h3>{{ assignments[group][0]['C.displayname'] }}</h3>
-				<ul>
-					{% for assignment in assignments[group] %}
-						<li>{{ assignment['name'] }}</li>
-					{% endfor %}
-				</ul>
-			{% endfor %}
-		</div>
-	{% endif %}
+					</ul>
+				</div>
+			{% endif %}
+		{% endif %}
+	{% endfor %}
 {% endblock %}
