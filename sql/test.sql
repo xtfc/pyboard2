@@ -39,3 +39,12 @@ INSERT INTO grades(uid, aid, score) VALUES(2, 1, 10); -- Jess got a 10 on Lab 1 
 INSERT INTO grades(uid, aid, score) VALUES(2, 2, 19); -- Jess got a 19 on Exam 1 :: CS 140
 INSERT INTO grades(uid, aid, score) VALUES(3, 7, 27); -- Tyler got a 27 on Research :: PhD
 INSERT INTO grades(uid, aid, score) VALUES(4, 6, 27); -- Phil got a 37 on Research :: Masters
+
+INSERT INTO messages(cid, title, body)
+	VALUES(1, 'CS 140 Message', 'These are like announcements. Should support *Markdown*.');
+INSERT INTO messages(cid, title, body)
+	VALUES(2, 'CS 320 Message', 'Getting **fancy** in `here`.');
+INSERT INTO messages(cid, title, body)
+	VALUES(3, 'Masters Message', 'And ***less*** fancy.');
+INSERT INTO messages(cid, title, body)
+	VALUES(4, 'PhD Message', 'And even less fancy.');

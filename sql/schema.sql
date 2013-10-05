@@ -42,7 +42,18 @@ CREATE TABLE grades (
 	aid INTEGER NOT NULL,
 	score INTEGER NOT NULL,
 	hash TEXT,
+	message TEXT,
 
 	FOREIGN KEY(uid) REFERENCES users(uid),
 	FOREIGN KEY(aid) REFERENCES assignments(aid)
+);
+
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+	mid INTEGER PRIMARY KEY AUTOINCREMENT,
+	cid INTEGER NOT NULL,
+	title TEXT NOT NULL,
+	body TEXT NOT NULL,
+
+	FOREIGN KEY(cid) REFERENCES courses(cid)
 );
