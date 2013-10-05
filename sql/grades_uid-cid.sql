@@ -1,4 +1,4 @@
-SELECT T2.username, T1.name, T1.body, T1.score, T1.points, T1.cid
+SELECT U.username, C.name, C.displayname, GA.name, GA.body, GA.score, GA.points
 FROM (
 	SELECT grades.uid, assignments.name, assignments.body, grades.score, assignments.points, assignments.cid
 	FROM users, assignments, grades, entries
@@ -8,8 +8,12 @@ FROM (
 	AND (entries.uid=users.uid)
 	AND (users.uid=:uid)
 	AND (entries.cid=:cid)
-	ORDER BY assignments.cid) AS T1
+	ORDER BY assignments.cid) AS GA
 JOIN (
-	SELECT users.uid, users.username
-	FROM users) AS T2
-ON T1.uid=T2.uid
+	SELECT uid, username
+	FROM users) AS U
+ON GA.uid=U.uid
+JOIN (
+	SELECT cid, name, displayname
+	FROM courses) AS C
+ON GA.cid=C.cid

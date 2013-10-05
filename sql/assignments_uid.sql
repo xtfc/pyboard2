@@ -1,4 +1,10 @@
-SELECT assignments.*
-FROM assignments, entries
-WHERE (assignments.cid=entries.cid)
-AND (entries.uid=:uid)
+SELECT A.*, C.name, C.displayname
+FROM (
+	SELECT assignments.*
+	FROM assignments, entries
+	WHERE (assignments.cid=entries.cid)
+	AND (entries.uid=:uid)) AS A
+JOIN (
+	SELECT cid, name, displayname
+	FROM courses) AS C
+ON A.cid=C.cid

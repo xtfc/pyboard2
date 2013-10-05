@@ -8,6 +8,14 @@ def open_sql(filename):
 	with open(os.path.join('sql', filename + '.sql')) as f:
 		return f.read()
 
+def group(items, key):
+	groups = dict()
+	for item in items:
+		if item[key] not in groups:
+			groups[item[key]] = []
+		groups[item[key]].append(item)
+	return groups
+
 def check_auth(username, password):
 	if app.debug:
 		user = g.db.queryone('SELECT uid FROM users WHERE username=:username', username=username)
@@ -64,8 +72,8 @@ def dashboard(course = None):
 		title=title,
 		navkey=navkey,
 		courses=courses,
-		grades=grades,
-		assignments=assignments)
+		grades=group(grades, 'C.name'),
+		assignments=group(assignments, 'C.name'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
