@@ -41,7 +41,6 @@ CREATE TABLE grades (
 	uid INTEGER NOT NULL,
 	aid INTEGER NOT NULL,
 	score INTEGER NOT NULL,
-	hash TEXT,
 	message TEXT,
 
 	FOREIGN KEY(uid) REFERENCES users(uid),
