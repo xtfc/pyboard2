@@ -22,6 +22,13 @@ class Database:
 		cur.close()
 		return rv
 
+	def query_saveid(self, query, **kwargs):
+		cur = self.connect().execute(query, kwargs)
+		rv = cur.fetchall()
+		id = cur.lastrowid
+		cur.close()
+		return id
+
 	def queryone(self, query, **kwargs):
 		rv = self.query(query, **kwargs)
 		return (rv[0] if rv else None)

@@ -55,7 +55,7 @@
 					<h3>Assignments</h3>
 					<ul>
 						{% for assignment in assignments[course['name']] %}
-							<li>{{ assignment['name'] }}</li>
+							<li><a href="{{ url_for('assignment', aid=assignment['aid']) }}">{{ assignment['name'] }}</a></li>
 						{% endfor %}
 					</ul>
 				</div>
