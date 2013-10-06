@@ -11,7 +11,7 @@ You don't yet.
 ```bash
 $ pip install -U -r requirements.txt
 $ sqlite3 test.db < sql/schema.sql
-$ sqlite3 test.db < test.sql
+$ sqlite3 test.db < sql/test.sql
 $ bump debug
 ```
 
