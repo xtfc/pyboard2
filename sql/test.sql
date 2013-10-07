@@ -50,11 +50,11 @@ INSERT INTO grades(uid, aid, score, timestamp)
 INSERT INTO grades(uid, aid, score, timestamp)
 	VALUES(4, 6, 37, strftime('%s', 'now')); -- Phil got a 37 on Research :: Masters
 
-INSERT INTO messages(cid, title, body)
-	VALUES(1, 'CS 140 Message', 'These are like announcements. Should support *Markdown*.');
-INSERT INTO messages(cid, title, body)
-	VALUES(2, 'CS 320 Message', 'Getting **fancy** in `here`.');
-INSERT INTO messages(cid, title, body)
-	VALUES(3, 'Masters Message', 'And ***less*** fancy.');
-INSERT INTO messages(cid, title, body)
-	VALUES(4, 'PhD Message', 'And even less fancy.');
+INSERT INTO messages(cid, title, body, timestamp)
+	VALUES(1, 'CS 140 Message', 'These are like announcements. Should support *Markdown*.', strftime('%s', 'now'));
+INSERT INTO messages(cid, title, body, timestamp)
+	VALUES(2, 'CS 320 Message', 'Getting **fancy** in `here`.', strftime('%s', 'now'));
+INSERT INTO messages(cid, title, body, timestamp)
+	VALUES(3, 'Masters Message', 'And ***less*** fancy.', strftime('%s', 'now'));
+INSERT INTO messages(cid, title, body, timestamp)
+	VALUES(4, 'PhD Message', 'And even less fancy.', strftime('%s', 'now'));

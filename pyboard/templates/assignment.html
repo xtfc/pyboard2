@@ -3,10 +3,11 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1-2">
 		<h3>{{ assignment['name'] }}</h3>
-		<p><em>Due: {{ assignment['due'] }} / Possible score: {{ assignment['points'] }}</em></p>
+		<time>{{ assignment['due'] }}</time>
+		<p><em>Possible score: {{ assignment['points'] }}</em></p>
 		{{ assignment['body']|markdown }}
 	</div>
-	<div class="pure-u-1-2" id="submit">
+	<div class="pure-u-1-2">
 		{% if submittable %}
 			<h3>Submit</h3>
 			<form class="pure-form" action="{{ url_for('submit', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">

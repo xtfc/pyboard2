@@ -35,7 +35,7 @@
 				</div>
 			{% endif %}
 			{% if assignments and course['name'] in assignments %}
-				<div id="assignments" class="pure-u-1-2">
+				<div class="pure-u-1-2">
 					<h3>Assignments</h3>
 					<ul>
 						{% for assignment in assignments[course['name']] %}
@@ -45,13 +45,16 @@
 				</div>
 			{% endif %}
 			{% if messages and course['name'] in messages %}
-				<div id="messages" class="pure-u-1-2">
+				<div class="pure-u-1-2">
 					<h3>Messages</h3>
-					<ul>
-						{% for message in messages[course['name']] %}
-							<li>{{ message['title'] }}</li>
-						{% endfor %}
-					</ul>
+					{% for message in messages[course['name']] %}
+						<h4>{{ message['title'] }}</h4>
+						<time>{{ message['timestamp'] }}</time>
+						{{ message['body']|markdown }}
+						{% if not loop.last %}
+							<hr>
+						{% endif %}
+					{% endfor %}
 				</div>
 			{% endif %}
 		{% endif %}
