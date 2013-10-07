@@ -1,10 +1,5 @@
 import bumpy as b, sys
-
-# won't be able to find the pyboard package without this
-if '.' not in sys.path: sys.path.append('.')
 from pyboard.app import app
-
-b.config(cli=True)
 
 @b.task
 def setup():
