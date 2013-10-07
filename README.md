@@ -1,6 +1,8 @@
 # Pyboard
 
-Fast, minimal course management software powered by [Python](http://www.python.org/), [Flask](https://github.com/mitsuhiko/flask), and [SQlite](http://www.sqlite.org/).
+Fast, minimal course management software powered by
+[Python](http://www.python.org/), [Flask](https://github.com/mitsuhiko/flask),
+and [SQLite](http://www.sqlite.org/).
 
 ## Usage
 
@@ -15,4 +17,5 @@ $ sqlite3 test.db < sql/test.sql
 $ bump debug
 ```
 
-Point browser to `http://localhost:5000/` and log in with any valid username and a password of `password`.
+Point browser to `http://localhost:5000/` and log in with any valid username
+and a password of `password`.
