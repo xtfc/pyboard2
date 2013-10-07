@@ -44,6 +44,16 @@
 					</ul>
 				</div>
 			{% endif %}
+			{% if messages and course['name'] in messages %}
+				<div id="messages" class="pure-u-1-2">
+					<h3>Messages</h3>
+					<ul>
+						{% for message in messages[course['name']] %}
+							<li>{{ message['title'] }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
 		{% endif %}
 	{% endfor %}
 {% endblock %}

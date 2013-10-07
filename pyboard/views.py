@@ -61,12 +61,14 @@ def dashboard(course = None):
 		courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 		grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
 		assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
+		messages = g.db.query(open_sql('messages_uid'), uid=g.user['uid'])
 		title = 'Dashboard'
 		navkey = 'dashboard'
 	else:
 		courses = g.db.query(open_sql('courses_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
+		messages = g.db.query(open_sql('messages_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
 		title = g.course['displayname'] + ' Dashboard'
 		navkey = g.course['name'] + '-dashboard'
 
@@ -75,7 +77,8 @@ def dashboard(course = None):
 		navkey=navkey,
 		courses=courses,
 		grades=group(grades, 'C.name'),
-		assignments=group(assignments, 'C.name'))
+		assignments=group(assignments, 'C.name'),
+		messages=group(messages, 'C.name'))
 
 @app.route('/assignments/<aid>')
 @requires_auth
