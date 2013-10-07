@@ -7,13 +7,15 @@
 		{{ assignment['body']|markdown }}
 	</div>
 	<div class="pure-u-1-2" id="submit">
-		<h3>Submit</h3>
-		<form class="pure-form" action="{{ url_for('submit', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
-			<input type="file" name="submission" text="stuff"><br>
-			<input type="submit">
-		</form>
-		<hr>
+		{% if submittable %}
+			<h3>Submit</h3>
+			<form class="pure-form" action="{{ url_for('submit', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
+				<input type="file" name="submission" text="stuff"><br>
+				<input type="submit">
+			</form>
+		{% endif %}
 		{% if grades %}
+			<h3>Grades</h3>
 			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
 				<thead>
 					<tr>

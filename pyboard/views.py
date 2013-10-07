@@ -1,4 +1,4 @@
-import flask, os
+import flask, os, time
 from datetime import datetime
 from flask import g, request, session
 from functools import wraps
@@ -96,11 +96,17 @@ def assignment(aid):
 		navkey='assignment' + str(aid),
 		assignment=assignment,
 		grades=grades,
+		submittable=assignment['due'] > time.time(),
 		courses=courses)
 
 @app.route('/assignments/<aid>/submit', methods=['POST'])
 @requires_auth
 def submit(aid):
+	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
+	if assignment['due'] <= time.time():
+		flask.flash('Unable to submit past the due date')
+		return flask.redirect(flask.url_for('assignment', aid=aid))
+
 	ufile = request.files['submission']
 	if not ufile:
 		flask.flash('No file selected')
