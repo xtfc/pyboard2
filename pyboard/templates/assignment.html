@@ -3,6 +3,7 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1-2">
 		<h3>{{ assignment['name'] }}</h3>
+		<p><em>Possible score: {{ assignment['points'] }}</em></p>
 		{{ assignment['body']|markdown }}
 	</div>
 	<div class="pure-u-1-2" id="submit">
@@ -11,5 +12,26 @@
 			<input type="file" name="submission" text="stuff"><br>
 			<input type="submit">
 		</form>
+		<hr>
+		{% if grades %}
+			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
+				<thead>
+					<tr>
+						<th>Owner</th>
+						<th>Score</th>
+						<th>Message</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for grade in grades %}
+						<tr>
+							<td>{{ grade['U.username'] }}</td>
+							<td>{{ grade['G.score'] }}</td>
+							<td>{{ grade['G.message'] }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% endif %}
 	</div>
 {% endblock %}

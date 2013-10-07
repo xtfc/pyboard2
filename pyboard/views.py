@@ -82,10 +82,13 @@ def dashboard(course = None):
 def assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
 	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
+	grades = g.db.query(open_sql('grades_aid'), aid=aid)
+
 	return flask.render_template('assignment.html',
 		title=assignment['name'],
 		navkey='assignment' + str(aid),
 		assignment=assignment,
+		grades=grades,
 		courses=courses)
 
 @app.route('/assignments/<aid>/submit', methods=['POST'])
