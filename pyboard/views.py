@@ -80,19 +80,22 @@ def dashboard(course = None):
 @app.route('/assignments/<aid>')
 @requires_auth
 def assignment(aid):
+	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
+	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 	return flask.render_template('assignment.html',
-		aid=aid)
+		title=assignment['name'],
+		navkey='assignment' + str(aid),
+		assignment=assignment,
+		courses=courses)
 
 @app.route('/assignments/<aid>/submit', methods=['POST'])
 @requires_auth
 def submit(aid):
-	user_id = g.db.queryone('SELECT uid FROM users WHERE username=:username', username=session['username'])[0]
-
 	ufile = request.files['submission']
 	filename = secure_filename(ufile.filename)
 
 	gid = g.db.query_saveid('INSERT INTO grades(uid, aid, score, message) values(:uid, :aid, 0, "")',
-				uid=user_id,
+				uid=g.user['uid'],
 				aid=aid)
 
 	upload_path = os.path.join(

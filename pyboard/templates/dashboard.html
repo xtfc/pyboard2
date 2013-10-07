@@ -1,22 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-	<nav class="pure-u-1">
-		<div id="nav" class="pure-menu pure-menu-open pure-menu-horizontal">
-			<ul id="nav-items">
-				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-				{% if courses %}
-					{% for course in courses %}
-						<li>
-							<a href="{{ url_for('dashboard', course=course['name']) }}">
-								{{ course['displayname'] }}
-							</a>
-						</li>
-					{% endfor %}
-				{% endif %}
-				<li><a href="{{ url_for('logout') }}">{{ g.user['name'] }}</a></li>
-			</ul>
-		</div>
-	</nav>
+	{% include "nav.html" %}
 	{% for course in courses %}
 		{% if course['visible'] %}
 			<div class="pure-u-1">
