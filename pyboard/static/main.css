@@ -1,7 +1,5 @@
 #container {
-	display: block;
-	width: 60em;
-	margin: 2em auto;
+	margin: 2em;
 }
 
 #container > div {
