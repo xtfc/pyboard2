@@ -1,6 +1,8 @@
 import flask, os
+from datetime import datetime
 from flask import g, request, session
 from functools import wraps
+from werkzeug import secure_filename
 from pyboard.app import app
 from pyboard.db import Database
 
@@ -74,6 +76,41 @@ def dashboard(course = None):
 		courses=courses,
 		grades=group(grades, 'C.name'),
 		assignments=group(assignments, 'C.name'))
+
+@app.route('/assignments/<aid>')
+@requires_auth
+def assignment(aid):
+	return flask.render_template('assignment.html',
+		aid=aid)
+
+@app.route('/assignments/<aid>/submit', methods=['POST'])
+@requires_auth
+def submit(aid):
+	user_id = g.db.queryone('SELECT uid FROM users WHERE username=:username', username=session['username'])[0]
+
+	ufile = request.files['submission']
+	filename = secure_filename(ufile.filename)
+
+	gid = g.db.query_saveid('INSERT INTO grades(uid, aid, score, message) values(:uid, :aid, 0, "")',
+				uid=user_id,
+				aid=aid)
+
+	upload_path = os.path.join(
+		'uploads',
+		str(gid))
+	upload_file = os.path.join(upload_path, filename)
+
+	try:
+		os.makedirs(upload_path)
+	except:
+		flask.abort(500)
+
+	ufile.save(upload_file)
+
+	g.db.commit()
+
+	flask.flash('Submission received')
+	return flask.redirect(flask.url_for('assignment', aid=aid))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

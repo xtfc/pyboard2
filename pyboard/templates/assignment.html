@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="pure-u-1-2" id="submit">
+	<h3>Submit</h3>
+	<form class="pure-form" action="{{ url_for('submit', aid=aid) }}" method="POST" enctype="multipart/form-data">
+		<input type="file" name="submission" text="stuff" /><br />
+		<input type="submit" />
+	</form>
+</div>
+
+{% endblock %}
