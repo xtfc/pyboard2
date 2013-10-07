@@ -1,4 +1,4 @@
-import bumpy as b, sys
+import bumpy as b
 from pyboard.app import app
 
 @b.task

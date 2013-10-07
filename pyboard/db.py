@@ -22,17 +22,19 @@ class Database:
 		cur.close()
 		return rv
 
-	def query_saveid(self, query, **kwargs):
+	def queryone(self, query, **kwargs):
+		rv = self.query(query, **kwargs)
+		return (rv[0] if rv else None)
+
+	def execute(self, query, **kwargs):
 		cur = self.connect().execute(query, kwargs)
 		rv = cur.fetchall()
 		id = cur.lastrowid
 		cur.close()
 		return id
 
-	def queryone(self, query, **kwargs):
-		rv = self.query(query, **kwargs)
-		return (rv[0] if rv else None)
-
+	def executescript(self, query):
+		self.connect().executescript(query)
 
 	def querymany(self, query, args):
 		cur = self.connect().executemany(query, args)
