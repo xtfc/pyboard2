@@ -81,6 +81,13 @@ def dashboard(course = None):
 @requires_auth
 def assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
+
+	# ensure the user is enrolled in this assignment's course
+	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid', uid=g.user['uid'], cid=assignment[1])
+	if entry is None:
+		flask.flash('Not in course')
+		return flask.redirect(flask.url_for('dashboard'))
+
 	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 	grades = g.db.query(open_sql('grades_aid'), aid=aid)
 
