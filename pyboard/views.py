@@ -102,27 +102,29 @@ def assignment(aid):
 @requires_auth
 def submit(aid):
 	ufile = request.files['submission']
+	if not ufile:
+		flask.flash('No file selected')
+		return flask.redirect(flask.url_for('assignment', aid=aid))
+
 	filename = secure_filename(ufile.filename)
 
 	gid = g.db.query_saveid('INSERT INTO grades(uid, aid, score, message) values(:uid, :aid, 0, "")',
-				uid=g.user['uid'],
-				aid=aid)
+		uid=g.user['uid'],
+		aid=aid)
 
-	upload_path = os.path.join(
-		'uploads',
-		str(gid))
+	upload_path = os.path.join('uploads', str(gid))
 	upload_file = os.path.join(upload_path, filename)
 
 	try:
 		os.makedirs(upload_path)
+		ufile.save(upload_file)
 	except:
-		flask.abort(500)
-
-	ufile.save(upload_file)
+		flask.flash('There was an error processing your submission. Please try again.')
+		return flask.redirect(flask.url_for('assignment', aid=aid))
 
 	g.db.commit()
-
 	flask.flash('Submission received')
+
 	return flask.redirect(flask.url_for('assignment', aid=aid))
 
 @app.route('/login', methods=['GET', 'POST'])
