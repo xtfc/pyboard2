@@ -108,7 +108,7 @@ def submit(aid):
 
 	filename = secure_filename(ufile.filename)
 
-	gid = g.db.execute('INSERT INTO grades(uid, aid, score, message) values(:uid, :aid, 0, "")',
+	gid = g.db.execute('INSERT INTO grades(uid, aid, score, timestamp) values(:uid, :aid, 0, strftime("%s", "now"))',
 		uid=g.user['uid'],
 		aid=aid)
 

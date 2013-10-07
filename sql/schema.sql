@@ -31,6 +31,7 @@ CREATE TABLE assignments (
 	points INTEGER NOT NULL,
 	name TEXT NOT NULL,
 	body TEXT NOT NULL,
+	due INTEGER DEFAULT 0,
 
 	FOREIGN KEY(cid) REFERENCES courses(cid)
 );
@@ -40,6 +41,7 @@ CREATE TABLE grades (
 	gid INTEGER PRIMARY KEY AUTOINCREMENT,
 	uid INTEGER NOT NULL,
 	aid INTEGER NOT NULL,
+	timestamp INTEGER NOT NULL,
 	score INTEGER NOT NULL,
 	message TEXT,
 

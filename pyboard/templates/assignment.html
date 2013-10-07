@@ -3,7 +3,7 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1-2">
 		<h3>{{ assignment['name'] }}</h3>
-		<p><em>Possible score: {{ assignment['points'] }}</em></p>
+		<p><em>Due: {{ assignment['due'] }} / Possible score: {{ assignment['points'] }}</em></p>
 		{{ assignment['body']|markdown }}
 	</div>
 	<div class="pure-u-1-2" id="submit">
