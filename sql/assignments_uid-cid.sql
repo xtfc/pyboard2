@@ -9,3 +9,4 @@ JOIN (
 	SELECT cid, name, displayname
 	FROM courses) AS C
 ON A.cid=C.cid
+ORDER BY A.due DESC
