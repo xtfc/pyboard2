@@ -49,7 +49,7 @@
 					<h3>Messages</h3>
 					{% for message in messages[course['name']] %}
 						<h4>{{ message['title'] }}</h4>
-						<time>{{ message['timestamp'] }}</time>
+						<time>{{ message['timestamp']|datetime }}</time>
 						{{ message['body']|markdown }}
 						{% if not loop.last %}
 							<hr>

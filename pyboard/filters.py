@@ -1,3 +1,6 @@
+from datetime import datetime
 from pyboard.app import app
 
-# Add any custom template filters here
+@app.template_filter('datetime')
+def filter_datetime(seconds, format='%B %e, %Y @ %I:%M%P'):
+	return datetime.fromtimestamp(seconds).strftime(format)
