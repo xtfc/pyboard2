@@ -1,0 +1,61 @@
+<div class="pure-u-1">
+	<h2>{{ course['displayname'] }}</h2>
+	<hr>
+</div>
+{% if _grades %}
+	<div class="pure-u-1-3">
+		<h3>Grades</h3>
+		<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
+			<thead>
+				<tr>
+					<th>Owner</th>
+					<th>Course</th>
+					<th>Assignment</th>
+					<th>Score</th>
+					<th>Possible</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for grade in _grades %}
+					<tr>
+						<td>{{ grade['U.username'] }}</td>
+						<td>{{ grade['C.displayname'] }}</td>
+						<td>{{ grade['GA.name'] }}</td>
+						<td>{{ grade['GA.score'] }}</td>
+						<td>{{ grade['GA.points'] }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endif %}
+{% if _assignments %}
+	<div class="pure-u-1-3">
+		<h3>Assignments</h3>
+		<ul>
+			{% for assignment in _assignments %}
+				<li>
+					<a href="{{ url_for('assignment', aid=assignment['aid']) }}">
+						{{ assignment['name'] }}
+						{% if assignment['due'] %}
+							({{ assignment['due']|datetime }})
+						{% endif %}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endif %}
+{% if _messages %}
+	<div class="pure-u-1-3">
+		<h3>Messages</h3>
+		{% for message in _messages %}
+			<h4>{{ message['title'] }}</h4>
+			<time>{{ message['timestamp']|datetime }}</time>
+			{{ message['body']|markdown }}
+			{% if not loop.last %}
+				<hr>
+			{% endif %}
+		{% endfor %}
+	</div>
+{% endif %}
