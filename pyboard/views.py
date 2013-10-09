@@ -65,16 +65,28 @@ def dashboard():
 @app.route('/course/<cid>')
 @requires_auth
 def course(cid):
-	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=request.view_args['cid'])
+	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid',
+		cid=cid)
+	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
+		uid=g.user['uid'],
+		cid=cid)
+	grades = g.db.query(open_sql('grades_uid-cid'),
+		uid=g.user['uid'],
+		cid=cid)
+	assignments = g.db.query(open_sql('assignments_uid-cid'),
+		uid=g.user['uid'],
+		cid=cid)
+	messages = g.db.query(open_sql('messages_uid-cid'),
+		uid=g.user['uid'],
+		cid=cid)
 
 	return flask.render_template('course.html',
 		title=g.course['name'],
 		navkey='cid-' + str(cid),
-		grades=g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),
-		assignments=g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),
-		messages=g.db.query(open_sql('messages_uid-cid'), uid=g.user['uid'], cid=g.course['cid']))
-
-
+		entry=entry,
+		grades=grades,
+		assignments=assignments,
+		messages=messages)
 
 @app.route('/assignment/<aid>')
 @requires_auth
@@ -84,7 +96,8 @@ def assignment(aid):
 
 	# ensure the user is enrolled in this assignment's course
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
-		uid=g.user['uid'], cid=assignment['cid'])
+		uid=g.user['uid'],
+		cid=assignment['cid'])
 
 	if entry is None:
 		flask.flash('Not in course')
