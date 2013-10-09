@@ -1,4 +1,4 @@
-SELECT A.*, C.name, C.displayname
+SELECT A.*, C.*
 FROM (
 	SELECT assignments.*
 	FROM assignments, entries
@@ -6,7 +6,7 @@ FROM (
 	AND (entries.uid=:uid)
 	AND (entries.cid=:cid)) AS A
 JOIN (
-	SELECT cid, name, displayname
+	SELECT cid, displayname
 	FROM courses) AS C
 ON A.cid=C.cid
 ORDER BY A.name ASC

@@ -1,4 +1,4 @@
-SELECT M.*, C.name, C.displayname
+SELECT M.*, C.*
 FROM (
 	SELECT messages.*
 	FROM messages, entries
@@ -6,7 +6,7 @@ FROM (
 	AND (entries.uid=:uid)
 	AND (entries.cid=:cid)) AS M
 JOIN (
-	SELECT cid, name, displayname
+	SELECT cid, displayname
 	FROM courses) AS C
 ON M.cid=C.cid
 ORDER BY M.mid DESC

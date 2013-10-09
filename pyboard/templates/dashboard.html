@@ -1,27 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 	{% include "nav.html" %}
-	{% for course in courses %}
-		{% if course['visible'] %}
-			{% if grades and course['name'] in grades %}
-				{% set _grades = grades[course['name']] %}
-			{% else %}
-				{% set _grades = None %}
-			{% endif %}
-
-			{% if assignments and course['name'] in assignments %}
-				{% set _assignments = assignments[course['name']] %}
-			{% else %}
-				{% set _assignments = None %}
-			{% endif %}
-
-			{% if messages and course['name'] in messages %}
-				{% set _messages = messages[course['name']] %}
-			{% else %}
-				{% set _messages = None %}
-			{% endif %}
-
-			{% include "dashboard-course.html" %}
+	{% for course in g.courses %}
+		{% if grades and course['cid'] in grades %}
+			{% set _grades = grades[course['cid']] %}
+		{% else %}
+			{% set _grades = None %}
 		{% endif %}
+
+		{% if assignments and course['cid'] in assignments %}
+			{% set _assignments = assignments[course['cid']] %}
+		{% else %}
+			{% set _assignments = None %}
+		{% endif %}
+
+		{% if messages and course['cid'] in messages %}
+			{% set _messages = messages[course['cid']] %}
+		{% else %}
+			{% set _messages = None %}
+		{% endif %}
+
+		{% include "dashboard-course.html" %}
 	{% endfor %}
 {% endblock %}

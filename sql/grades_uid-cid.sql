@@ -1,4 +1,4 @@
-SELECT U.username, C.name, C.displayname, GA.name, GA.body, GA.score, GA.points
+SELECT U.username, C.*, GA.name, GA.body, GA.score, GA.points
 FROM (
 	SELECT grades.uid, grades.gid, assignments.name, assignments.body, grades.score, assignments.points, assignments.cid
 	FROM users, assignments, grades, entries
@@ -13,7 +13,7 @@ JOIN (
 	FROM users) AS U
 ON GA.uid=U.uid
 JOIN (
-	SELECT cid, name, displayname
+	SELECT cid, displayname
 	FROM courses) AS C
 ON GA.cid=C.cid
 ORDER BY GA.cid ASC, GA.gid ASC

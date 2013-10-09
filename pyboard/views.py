@@ -42,10 +42,7 @@ def setup():
 
 	if 'username' in session:
 		g.user = g.db.queryone('SELECT * FROM users WHERE username=:username', username=session['username'])
-
-	if request.view_args:
-		if 'course' in request.view_args:
-			g.course = g.db.queryone('SELECT * FROM courses WHERE name=:course', course=request.view_args['course'])
+		g.courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 
 @app.teardown_request
 def teardown(exception):
@@ -54,55 +51,58 @@ def teardown(exception):
 		db.close()
 
 @app.route('/')
-@app.route('/course/<course>')
 @requires_auth
-def dashboard(course = None):
-	if course is None:
-		courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
-		grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
-		assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
-		messages = g.db.query(open_sql('messages_uid'), uid=g.user['uid'])
-		title = 'Dashboard'
-		navkey = 'dashboard'
-	else:
-		courses = g.db.query(open_sql('courses_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
-		grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
-		assignments = g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
-		messages = g.db.query(open_sql('messages_uid-cid'), uid=g.user['uid'], cid=g.course['cid'])
-		title = g.course['displayname'] + ' Dashboard'
-		navkey = g.course['name'] + '-dashboard'
+def dashboard():
+	grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
+	assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
+	messages = g.db.query(open_sql('messages_uid'), uid=g.user['uid'])
+	title = 'Dashboard'
+	navkey = 'dashboard'
 
 	return flask.render_template('dashboard.html',
 		title=title,
 		navkey=navkey,
-		courses=courses,
-		grades=group(grades, 'C.name'),
-		assignments=group(assignments, 'C.name'),
-		messages=group(messages, 'C.name'))
+		grades=group(grades, 'cid'),
+		assignments=group(assignments, 'cid'),
+		messages=group(messages, 'cid'))
 
-@app.route('/assignments/<aid>')
+@app.route('/course/<cid>')
+@requires_auth
+def course(cid):
+	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=request.view_args['cid'])
+
+	return flask.render_template('course.html',
+		title=g.course['displayname'],
+		navkey='cid-' + str(cid),
+		grades=g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),
+		assignments=g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),
+		messages=g.db.query(open_sql('messages_uid-cid'), uid=g.user['uid'], cid=g.course['cid']))
+
+
+
+@app.route('/assignment/<aid>')
 @requires_auth
 def assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
 
 	# ensure the user is enrolled in this assignment's course
-	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid', uid=g.user['uid'], cid=assignment[1])
+	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
+		uid=g.user['uid'], cid=assignment['cid'])
+
 	if entry is None:
 		flask.flash('Not in course')
 		return flask.redirect(flask.url_for('dashboard'))
 
-	courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 	grades = g.db.query(open_sql('grades_aid'), aid=aid)
 
 	return flask.render_template('assignment.html',
 		title=assignment['name'],
-		navkey='assignment' + str(aid),
+		navkey='aid-' + str(aid),
 		assignment=assignment,
-		grades=grades,
 		submittable=assignment['due'] > time.time(),
-		courses=courses)
+		grades=grades)
 
-@app.route('/assignments/<aid>/submit', methods=['POST'])
+@app.route('/assignment/<aid>/submit', methods=['POST'])
 @requires_auth
 def submit(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)

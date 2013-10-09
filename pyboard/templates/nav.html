@@ -2,10 +2,10 @@
 	<div id="nav" class="pure-menu pure-menu-open pure-menu-horizontal">
 		<ul id="nav-items">
 			<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-			{% if courses %}
-				{% for course in courses %}
+			{% if g.courses %}
+				{% for course in g.courses %}
 					<li>
-						<a href="{{ url_for('dashboard', course=course['name']) }}">
+						<a href="{{ url_for('course', cid=course['cid']) }}">
 							{{ course['displayname'] }}
 						</a>
 					</li>
