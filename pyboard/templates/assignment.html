@@ -3,7 +3,7 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1">
 		<h2>
-			<a href="{{ url_for('course', cid=g.course['cid']) }}">{{ g.course['name'] }}</a>
+			<a href="{{ url_for('course', cid=course['cid']) }}">{{ course['name'] }}</a>
 			:: {{ assignment['name'] }}
 		</h2>
 		<hr>

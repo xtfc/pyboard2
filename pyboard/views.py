@@ -38,7 +38,6 @@ def requires_auth(func):
 def setup():
 	g.db = Database(app.config['DATABASE'])
 	g.user = None
-	g.course = None
 
 	if 'username' in session:
 		g.user = g.db.queryone('SELECT * FROM users WHERE username=:username', username=session['username'])
@@ -65,24 +64,17 @@ def dashboard():
 @app.route('/course/<cid>')
 @requires_auth
 def course(cid):
-	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid',
-		cid=cid)
+	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=cid)
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
-		uid=g.user['uid'],
-		cid=cid)
-	grades = g.db.query(open_sql('grades_uid-cid'),
-		uid=g.user['uid'],
-		cid=cid)
-	assignments = g.db.query(open_sql('assignments_uid-cid'),
-		uid=g.user['uid'],
-		cid=cid)
-	messages = g.db.query(open_sql('messages_uid-cid'),
-		uid=g.user['uid'],
-		cid=cid)
+		uid=g.user['uid'], cid=cid)
+	grades = g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=cid)
+	assignments = g.db.query(open_sql('assignments_cid'), cid=cid)
+	messages = g.db.query(open_sql('messages_cid'), cid=cid)
 
 	return flask.render_template('course.html',
-		title=g.course['name'],
+		title=course['name'],
 		navkey='cid-' + str(cid),
+		course=course,
 		entry=entry,
 		grades=grades,
 		assignments=assignments,
@@ -92,7 +84,7 @@ def course(cid):
 @requires_auth
 def assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
-	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=assignment['cid'])
+	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=assignment['cid'])
 
 	# ensure the user is enrolled in this assignment's course
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
