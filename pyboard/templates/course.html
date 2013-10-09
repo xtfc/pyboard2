@@ -5,9 +5,9 @@
 		<h2>{{ g.course['name'] }}</h2>
 		<hr>
 	</div>
-	{% if grades %}
-		<div class="pure-u-1-3">
-			<h3>Grades</h3>
+	<div class="pure-u-1-3">
+		<h3>Grades</h3>
+		{% if grades %}
 			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
 				<thead>
 					<tr>
@@ -28,11 +28,11 @@
 					{% endfor %}
 				</tbody>
 			</table>
-		</div>
-	{% endif %}
-	{% if assignments %}
-		<div class="pure-u-1-3">
-			<h3>Assignments</h3>
+		{% endif %}
+	</div>
+	<div class="pure-u-1-3">
+		<h3>Assignments</h3>
+		{% if assignments %}
 			<ul>
 				{% for assignment in assignments %}
 					<li>
@@ -45,11 +45,11 @@
 					</li>
 				{% endfor %}
 			</ul>
-		</div>
-	{% endif %}
-	{% if messages %}
-		<div class="pure-u-1-3">
-			<h3>Messages</h3>
+		{% endif %}
+	</div>
+	<div class="pure-u-1-3">
+		<h3>Messages</h3>
+		{% if messages %}
 			{% for message in messages %}
 				<h4>{{ message['title'] }}</h4>
 				<time>{{ message['timestamp']|datetime }}</time>
@@ -58,6 +58,6 @@
 					<hr>
 				{% endif %}
 			{% endfor %}
-		</div>
-	{% endif %}
+		{% endif %}
+	</div>
 {% endblock %}
