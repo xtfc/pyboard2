@@ -2,7 +2,10 @@
 {% block content %}
 	{% include "nav.html" %}
 	<div class="pure-u-1">
-		<h2>{{ g.course['name'] }} :: {{ assignment['name'] }}</h2>
+		<h2>
+			<a href="{{ url_for('course', cid=g.course['cid']) }}">{{ g.course['name'] }}</a>
+			:: {{ assignment['name'] }}
+		</h2>
 		<hr>
 	</div>
 	<div class="pure-u-1-3">

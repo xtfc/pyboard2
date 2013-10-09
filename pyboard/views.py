@@ -53,14 +53,12 @@ def teardown(exception):
 @app.route('/')
 @requires_auth
 def dashboard():
-	grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
 	assignments = g.db.query(open_sql('assignments-future_uid'), uid=g.user['uid'])
 	messages = g.db.query(open_sql('messages_uid-limit'), uid=g.user['uid'], limit=4)
 
 	return flask.render_template('dashboard.html',
 		title='Dashboard',
 		navkey='dashboard',
-		grades=group(grades, 'cid'),
 		assignments=group(assignments, 'cid'),
 		messages=group(messages, 'cid'))
 

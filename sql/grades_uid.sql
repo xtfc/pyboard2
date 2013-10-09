@@ -1,6 +1,6 @@
 SELECT U.username, C.*, GA.name, GA.body, GA.score, GA.points
 FROM (
-	SELECT grades.uid, grades.gid, assignments.name, assignments.body, grades.score, assignments.points, assignments.cid
+	SELECT grades.*, assignments.*
 	FROM users, assignments, grades, entries
 	WHERE ((grades.uid=users.uid) OR (entries.level > 0))
 	AND (grades.aid=assignments.aid)
@@ -8,11 +8,11 @@ FROM (
 	AND (entries.uid=users.uid)
 	AND (users.uid=:uid)) AS GA
 JOIN (
-	SELECT uid, username
+	SELECT *
 	FROM users) AS U
 ON GA.uid=U.uid
 JOIN (
-	SELECT cid, name
+	SELECT *
 	FROM courses) AS C
 ON GA.cid=C.cid
 ORDER BY GA.cid ASC, GA.gid ASC
