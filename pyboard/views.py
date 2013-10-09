@@ -82,6 +82,7 @@ def course(cid):
 @requires_auth
 def assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
+	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=assignment['cid'])
 
 	# ensure the user is enrolled in this assignment's course
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
