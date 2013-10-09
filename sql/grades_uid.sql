@@ -12,7 +12,7 @@ JOIN (
 	FROM users) AS U
 ON GA.uid=U.uid
 JOIN (
-	SELECT cid, displayname
+	SELECT cid, name
 	FROM courses) AS C
 ON GA.cid=C.cid
 ORDER BY GA.cid ASC, GA.gid ASC

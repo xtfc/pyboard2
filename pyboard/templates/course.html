@@ -2,7 +2,7 @@
 {% block content %}
 	{% include "nav.html" %}
 	<div class="pure-u-1">
-		<h2>{{ g.course['displayname'] }}</h2>
+		<h2>{{ g.course['name'] }}</h2>
 		<hr>
 	</div>
 	{% if grades %}
@@ -22,7 +22,7 @@
 					{% for grade in grades %}
 						<tr>
 							<td>{{ grade['U.username'] }}</td>
-							<td>{{ grade['displayname'] }}</td>
+							<td>{{ grade['name'] }}</td>
 							<td>{{ grade['GA.name'] }}</td>
 							<td>{{ grade['GA.score'] }}</td>
 							<td>{{ grade['GA.points'] }}</td>

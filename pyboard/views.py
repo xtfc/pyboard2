@@ -54,14 +54,12 @@ def teardown(exception):
 @requires_auth
 def dashboard():
 	grades = g.db.query(open_sql('grades_uid'), uid=g.user['uid'])
-	assignments = g.db.query(open_sql('assignments_uid'), uid=g.user['uid'])
-	messages = g.db.query(open_sql('messages_uid'), uid=g.user['uid'])
-	title = 'Dashboard'
-	navkey = 'dashboard'
+	assignments = g.db.query(open_sql('assignments-future_uid'), uid=g.user['uid'])
+	messages = g.db.query(open_sql('messages_uid-limit'), uid=g.user['uid'], limit=4)
 
 	return flask.render_template('dashboard.html',
-		title=title,
-		navkey=navkey,
+		title='Dashboard',
+		navkey='dashboard',
 		grades=group(grades, 'cid'),
 		assignments=group(assignments, 'cid'),
 		messages=group(messages, 'cid'))
@@ -72,7 +70,7 @@ def course(cid):
 	g.course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=request.view_args['cid'])
 
 	return flask.render_template('course.html',
-		title=g.course['displayname'],
+		title=g.course['name'],
 		navkey='cid-' + str(cid),
 		grades=g.db.query(open_sql('grades_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),
 		assignments=g.db.query(open_sql('assignments_uid-cid'), uid=g.user['uid'], cid=g.course['cid']),

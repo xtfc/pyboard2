@@ -5,7 +5,7 @@ FROM (
 	WHERE (messages.cid=entries.cid)
 	AND (entries.uid=:uid)) AS M
 JOIN (
-	SELECT cid, displayname
+	SELECT cid, name
 	FROM courses) AS C
 ON M.cid=C.cid
 ORDER BY M.mid DESC

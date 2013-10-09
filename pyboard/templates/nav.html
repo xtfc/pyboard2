@@ -6,7 +6,7 @@
 				{% for course in g.courses %}
 					<li>
 						<a href="{{ url_for('course', cid=course['cid']) }}">
-							{{ course['displayname'] }}
+							{{ course['name'] }}
 						</a>
 					</li>
 				{% endfor %}

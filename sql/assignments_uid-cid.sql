@@ -6,7 +6,7 @@ FROM (
 	AND (entries.uid=:uid)
 	AND (entries.cid=:cid)) AS A
 JOIN (
-	SELECT cid, displayname
+	SELECT cid, name
 	FROM courses) AS C
 ON A.cid=C.cid
 ORDER BY A.name ASC
