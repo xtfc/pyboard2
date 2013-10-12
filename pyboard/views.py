@@ -111,7 +111,8 @@ def assignment(aid):
 		navkey='aid-' + str(aid),
 		assignment=assignment,
 		submittable=assignment['due'] > time.time(),
-		grades=grades)
+		grades=grades,
+		course=course)
 
 @app.route('/assignment/<aid>/submit', methods=['POST'])
 @requires_auth
