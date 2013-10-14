@@ -34,6 +34,21 @@ def requires_auth(func):
 		return func(*args, **kwargs)
 	return wrapper
 
+def requires_level(level):
+	def outer_wrapper(func):
+		@wraps(func)
+		def wrapper(*args, **kwargs):
+			perm = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid AND level >= :level',
+				level=level,
+				uid=g.user['uid'],
+				cid=request.view_args['cid'])
+			if perm is None:
+				flask.flash('You do not have permission to view this page')
+				return flask.redirect(flask.url_for('dashboard'))
+			return func(*args, **kwargs)
+		return wrapper
+	return outer_wrapper
+
 @app.before_request
 def setup():
 	g.db = Database(app.config['DATABASE'])
