@@ -53,6 +53,9 @@
 						</a>
 					</li>
 				{% endfor %}
+				{% if entry['level'] >= 2 %}
+					<li><a href="{{ url_for('assignment_new', cid=course['cid']) }}">New Assignment</a></li>
+				{% endif %}
 			</ul>
 		{% endif %}
 	</div>
