@@ -41,7 +41,8 @@ def setup():
 
 	if 'username' in session:
 		g.user = g.db.queryone('SELECT * FROM users WHERE username=:username', username=session['username'])
-		g.courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
+		if g.user is not None:
+			g.courses = g.db.query(open_sql('courses_uid'), uid=g.user['uid'])
 
 @app.teardown_request
 def teardown(exception):
