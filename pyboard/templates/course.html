@@ -12,7 +12,9 @@
 			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
 				<thead>
 					<tr>
-						<th>Owner</th>
+						{% if entry['level'] > 0 %}
+							<th>Owner</th>
+						{% endif %}
 						<th>Assignment</th>
 						<th>Score</th>
 						<th>Possible</th>
@@ -21,7 +23,9 @@
 				<tbody>
 					{% for grade in grades %}
 						<tr>
-							<td>{{ grade['U.username'] }}</td>
+							{% if entry['level'] > 0 %}
+								<td>{{ grade['U.username'] }}</td>
+							{% endif %}
 							<td>
 								<a href="{{ url_for('assignment', aid=grade['GA.aid']) }}">
 									{{ grade['GA.name'] }}
@@ -49,6 +53,9 @@
 						</a>
 					</li>
 				{% endfor %}
+				{% if entry['level'] >= 2 %}
+					<li><a href="{{ url_for('assignment_new', cid=course['cid']) }}">New Assignment</a></li>
+				{% endif %}
 			</ul>
 		{% endif %}
 	</div>

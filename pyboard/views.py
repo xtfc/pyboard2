@@ -34,6 +34,21 @@ def requires_auth(func):
 		return func(*args, **kwargs)
 	return wrapper
 
+def requires_level(level):
+	def outer_wrapper(func):
+		@wraps(func)
+		def wrapper(*args, **kwargs):
+			perm = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid AND level >= :level',
+				level=level,
+				uid=g.user['uid'],
+				cid=request.view_args['cid'])
+			if perm is None:
+				flask.flash('You do not have permission to view this page')
+				return flask.redirect(flask.url_for('dashboard'))
+			return func(*args, **kwargs)
+		return wrapper
+	return outer_wrapper
+
 @app.before_request
 def setup():
 	g.db = Database(app.config['DATABASE'])
@@ -90,6 +105,28 @@ def course(cid):
 		assignments=assignments,
 		messages=messages)
 
+@app.route('/course/<cid>/assignment', methods=['GET', 'POST'])
+@requires_auth
+@requires_level(2)
+def assignment_new(cid):
+	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=cid)
+	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
+		uid=g.user['uid'], cid=cid)
+	if request.method == 'GET':
+		return flask.render_template('assignment_new.html',
+			navkey='cid-' + str(cid),
+			course=course,
+			entry=entry)
+	else:
+		assignment = g.db.execute('INSERT INTO assignments(cid, points, name, body, due) VALUES(:cid, :points, :name, :body, :due)',
+				cid=cid,
+				points=request.form['points'],
+				name=request.form['name'],
+				body=request.form['body'],
+				due=request.form['due'])
+		g.db.commit()
+		return flask.redirect(flask.url_for('assignment', aid=assignment))
+
 @app.route('/assignment/<aid>')
 @requires_auth
 def assignment(aid):
@@ -112,7 +149,8 @@ def assignment(aid):
 		navkey='aid-' + str(aid),
 		assignment=assignment,
 		submittable=assignment['due'] > time.time(),
-		grades=grades)
+		grades=grades,
+		course=course)
 
 @app.route('/assignment/<aid>/submit', methods=['POST'])
 @requires_auth
