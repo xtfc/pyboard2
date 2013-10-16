@@ -3,7 +3,11 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1">
 		<h2>{{ course['name'] }}</h2>
-		<em>You are level {{ entry['level'] }} in this course.</em>
+		<em>
+			You are
+			{{ 'an' if config['LEVELS'][entry['level']][0] in 'aeiouAEIOU' else 'a' }}
+			{{ config['LEVELS'][entry['level']] }} in this course.
+		</em>
 		<hr>
 	</div>
 	<div class="pure-u-1-3">
