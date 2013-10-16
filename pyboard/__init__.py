@@ -1,1 +1,1 @@
-from pyboard import app, config, filters, views, mail
+from pyboard import app, config, filters, views
