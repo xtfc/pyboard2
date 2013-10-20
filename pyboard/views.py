@@ -112,11 +112,13 @@ def assignment_new(cid):
 	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=cid)
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
 		uid=g.user['uid'], cid=cid)
+
 	if request.method == 'GET':
 		return flask.render_template('assignment_new.html',
 			navkey='cid-' + str(cid),
 			course=course,
 			entry=entry)
+
 	else:
 		assignment = g.db.execute('INSERT INTO assignments(cid, points, name, body, due) VALUES(:cid, :points, :name, :body, :due)',
 				cid=cid,
@@ -149,6 +151,7 @@ def assignment(aid):
 		navkey='aid-' + str(aid),
 		assignment=assignment,
 		submittable=assignment['due'] > time.time(),
+		entry=entry,
 		grades=grades,
 		course=course)
 

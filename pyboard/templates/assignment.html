@@ -6,6 +6,11 @@
 			<a href="{{ url_for('course', cid=course['cid']) }}">{{ course['name'] }}</a>
 			:: {{ assignment['name'] }}
 		</h2>
+		<em>
+			You are
+			{{ 'an' if config['LEVELS'][entry['level']][0] in 'aeiouAEIOU' else 'a' }}
+			{{ config['LEVELS'][entry['level']] }} in this course.
+		</em>
 		<hr>
 	</div>
 	<div class="pure-u-1-2">
@@ -21,7 +26,9 @@
 			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
 				<thead>
 					<tr>
-						<th>Owner</th>
+						{% if entry['level'] > 0 %}
+							<th>Owner</th>
+						{% endif %}
 						<th>Score</th>
 						<th>Submitted</th>
 						<th>Message</th>
@@ -30,7 +37,9 @@
 				<tbody>
 					{% for grade in grades %}
 						<tr>
-							<td>{{ grade['U.username'] }}</td>
+							{% if entry['level'] > 0 %}
+								<td>{{ grade['U.username'] }}</td>
+							{% endif %}
 							<td>{{ grade['G.score'] }}</td>
 							<td>{{ grade['G.timestamp']|datetime }}</td>
 							<td>{{ grade['G.message'] }}</td>
