@@ -1,4 +1,4 @@
-SELECT U.username, G.score, G.message, G.timestamp
+SELECT G.gid, U.username, G.score, G.message, G.timestamp
 FROM (
 	SELECT *
 	FROM grades

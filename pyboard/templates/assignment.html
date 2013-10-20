@@ -32,17 +32,23 @@
 						<th>Score</th>
 						<th>Submitted</th>
 						<th>Message</th>
+						{% if entry['level'] > 1 %}
+							<th>Actions</th>
+						{% endif %}
 					</tr>
 				</thead>
 				<tbody>
 					{% for grade in grades %}
-						<tr>
+						<tr id="grade{{ grade['G.gid'] }}">
 							{% if entry['level'] > 0 %}
 								<td>{{ grade['U.username'] }}</td>
 							{% endif %}
 							<td>{{ grade['G.score'] }}</td>
 							<td>{{ grade['G.timestamp']|datetime }}</td>
 							<td>{{ grade['G.message'] }}</td>
+							{% if entry['level'] > 1 %}
+								<td><a href="javascript:changeGrade('grade{{ grade['G.gid'] }}', 'edit')">edit</a></td>
+							{% endif %}
 						</tr>
 					{% endfor %}
 				</tbody>
