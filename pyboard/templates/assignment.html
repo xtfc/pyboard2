@@ -14,13 +14,6 @@
 		<hr>
 	</div>
 	<div class="pure-u-1-2">
-		{% if submittable %}
-			<h3>Submit</h3>
-			<form class="pure-form" action="{{ url_for('view_assignment', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
-				<input type="file" name="submission" text="stuff"><br>
-				<input type="submit">
-			</form>
-		{% endif %}
 		{% if grades %}
 			<h3>Grades</h3>
 			<table style="width: 100%" class="pure-table pure-table-bordered pure-table-striped">
@@ -66,5 +59,12 @@
 		<p>Due: <time>{{ assignment['due']|datetime }}</time></p>
 		<p><em>Possible score: {{ assignment['points'] }}</em></p>
 		{{ assignment['body']|markdown }}
+		{% if submittable %}
+			<h3>Submit</h3>
+			<form class="pure-form" action="{{ url_for('view_assignment', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
+				<input type="file" name="submission" text="stuff"><br>
+				<input type="submit">
+			</form>
+		{% endif %}
 	</div>
 {% endblock %}
