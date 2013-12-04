@@ -94,7 +94,7 @@ def view_course(cid):
 		assignments=assignments,
 		messages=messages)
 
-@app.route('/course/<cid>/assignment', methods=['GET', 'POST'])
+@app.route('/course/<cid>/new-assignment', methods=['GET', 'POST'])
 @requires_auth
 @requires_level(2)
 def view_new_assignment(cid):
@@ -118,9 +118,43 @@ def view_new_assignment(cid):
 		g.db.commit()
 		return flask.redirect(flask.url_for('view_assignment', aid=assignment))
 
-@app.route('/assignment/<aid>')
+@app.route('/assignment/<aid>', methods=['GET', 'POST'])
 @requires_auth
 def view_assignment(aid):
+	# Accept a submission
+	if request.method == 'POST':
+		assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
+		if assignment['due'] <= time.time():
+			flask.flash('Unable to submit past the due date')
+			return flask.redirect(flask.url_for('view_assignment', aid=aid))
+
+		ufile = request.files['submission']
+		if not ufile:
+			flask.flash('No file selected')
+			return flask.redirect(flask.url_for('view_assignment', aid=aid))
+
+		filename = secure_filename(ufile.filename)
+
+		gid = g.db.execute('INSERT INTO grades(uid, aid, score, timestamp) values(:uid, :aid, 0, strftime("%s", "now"))',
+			uid=g.user['uid'],
+			aid=aid)
+
+		upload_path = os.path.join('uploads', str(gid))
+		upload_file = os.path.join(upload_path, filename)
+
+		try:
+			os.makedirs(upload_path)
+			ufile.save(upload_file)
+		except:
+			flask.flash('There was an error processing your submission. Please try again.')
+			return flask.redirect(flask.url_for('view_assignment', aid=aid))
+
+		g.db.commit()
+		flask.flash('Submission received')
+
+		return flask.redirect(flask.url_for('view_assignment', aid=aid))
+
+	# View an assignment
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
 	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=assignment['cid'])
 
@@ -143,40 +177,6 @@ def view_assignment(aid):
 		entry=entry,
 		grades=grades,
 		course=course)
-
-@app.route('/assignment/<aid>/submit', methods=['POST'])
-@requires_auth
-def view_submit(aid):
-	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
-	if assignment['due'] <= time.time():
-		flask.flash('Unable to submit past the due date')
-		return flask.redirect(flask.url_for('view_assignment', aid=aid))
-
-	ufile = request.files['submission']
-	if not ufile:
-		flask.flash('No file selected')
-		return flask.redirect(flask.url_for('view_assignment', aid=aid))
-
-	filename = secure_filename(ufile.filename)
-
-	gid = g.db.execute('INSERT INTO grades(uid, aid, score, timestamp) values(:uid, :aid, 0, strftime("%s", "now"))',
-		uid=g.user['uid'],
-		aid=aid)
-
-	upload_path = os.path.join('uploads', str(gid))
-	upload_file = os.path.join(upload_path, filename)
-
-	try:
-		os.makedirs(upload_path)
-		ufile.save(upload_file)
-	except:
-		flask.flash('There was an error processing your submission. Please try again.')
-		return flask.redirect(flask.url_for('view_assignment', aid=aid))
-
-	g.db.commit()
-	flask.flash('Submission received')
-
-	return flask.redirect(flask.url_for('view_assignment', aid=aid))
 
 @app.route('/login', methods=['GET', 'POST'])
 def view_login():
