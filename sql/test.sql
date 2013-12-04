@@ -17,21 +17,21 @@ INSERT INTO entries(uid, cid, level) VALUES(4, 1, 2); -- Phil is a TA for CS 140
 INSERT INTO entries(uid, cid, level) VALUES(4, 3, 0); -- Phil is a student for Masters
 
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(1, 10, 'Lab 1', 'CS 140');
+	VALUES(1, 10, 'Lab 1', 'CS 140 Lab 1 description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(1, 20, 'Exam 1', 'CS 140');
+	VALUES(1, 20, 'Exam 1', 'CS 140 Exam 1 description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(2, 10, 'Lab 1', 'CS 320');
+	VALUES(2, 10, 'Lab 1', 'CS 320 Lab 1 description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(2, 10, 'Lab 2', 'CS 320');
+	VALUES(2, 10, 'Lab 2', 'CS 320 Lab 2 description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(2, 30, 'Exam 1', 'CS 320');
+	VALUES(2, 30, 'Exam 1', 'CS 320 Exam 1 description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(3, 100, 'Research', 'Masters');
+	VALUES(3, 100, 'Research', 'Masters Research description');
 INSERT INTO assignments(cid, points, name, body)
-	VALUES(4, 100, 'Research', 'PhD');
+	VALUES(4, 100, 'Research', 'PhD Research description');
 INSERT INTO assignments(cid, points, name, body, due)
-	VALUES(1, 10, 'Lab 2', 'CS 140', strftime('%s', 'now', '+1 month'));
+	VALUES(1, 10, 'Lab 2', 'CS 140 Lab 2 description', strftime('%s', 'now', '+1 month'));
 
 INSERT INTO grades(uid, aid, score, timestamp)
 	VALUES(1, 3, 9, strftime('%s', 'now')); -- John got a 9 on Lab 1 :: CS 320
