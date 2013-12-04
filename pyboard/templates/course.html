@@ -35,7 +35,13 @@
 									{{ grade['GA.name'] }}
 								</a>
 							</td>
-							<td>{{ grade['GA.score'] }}</td>
+							<td>
+								{% if grade['GA.score'] >= 0 %}
+									{{ grade['GA.score'] }}
+								{% else %}
+									&#8210;
+								{% endif %}
+							</td>
 							<td>{{ grade['GA.points'] }}</td>
 						</tr>
 					{% endfor %}

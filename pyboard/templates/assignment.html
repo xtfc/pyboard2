@@ -43,7 +43,13 @@
 							{% if entry['level'] > 0 %}
 								<td>{{ grade['U.username'] }}</td>
 							{% endif %}
-							<td>{{ grade['G.score'] }}</td>
+							<td>
+								{% if grade['G.score'] >= 0 %}
+									{{ grade['G.score'] }}
+								{% else %}
+									&#8210;
+								{% endif %}
+							</td>
 							<td>{{ grade['G.timestamp']|datetime }}</td>
 							<td>{{ grade['G.message'] }}</td>
 							{% if entry['level'] > 1 %}

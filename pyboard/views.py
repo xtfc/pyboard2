@@ -103,7 +103,7 @@ def view_new_assignment(cid):
 		uid=g.user['uid'], cid=cid)
 
 	if request.method == 'GET':
-		return flask.render_template('assignment_new.html',
+		return flask.render_template('new-assignment.html',
 			navkey='cid-' + str(cid),
 			course=course,
 			entry=entry)
@@ -135,7 +135,7 @@ def view_assignment(aid):
 
 		filename = secure_filename(ufile.filename)
 
-		gid = g.db.execute('INSERT INTO grades(uid, aid, score, timestamp) values(:uid, :aid, 0, strftime("%s", "now"))',
+		gid = g.db.execute('INSERT INTO grades(uid, aid, score, timestamp) values(:uid, :aid, -1, strftime("%s", "now"))',
 			uid=g.user['uid'],
 			aid=aid)
 
