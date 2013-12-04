@@ -3,7 +3,7 @@
 	{% include "nav.html" %}
 	<div class="pure-u-1">
 		<h2>
-			<a href="{{ url_for('course', cid=course['cid']) }}">{{ course['name'] }}</a>
+			<a href="{{ url_for('view_course', cid=course['cid']) }}">{{ course['name'] }}</a>
 			:: {{ assignment['name'] }}
 		</h2>
 		<em>
@@ -16,7 +16,7 @@
 	<div class="pure-u-1-2">
 		{% if submittable %}
 			<h3>Submit</h3>
-			<form class="pure-form" action="{{ url_for('submit', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
+			<form class="pure-form" action="{{ url_for('view_submit', aid=assignment['aid']) }}" method="POST" enctype="multipart/form-data">
 				<input type="file" name="submission" text="stuff"><br>
 				<input type="submit">
 			</form>

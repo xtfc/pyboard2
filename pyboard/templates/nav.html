@@ -1,17 +1,17 @@
 <nav class="pure-u-1">
 	<div id="nav" class="pure-menu pure-menu-open pure-menu-horizontal">
 		<ul id="nav-items">
-			<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+			<li><a href="{{ url_for('view_dashboard') }}">Dashboard</a></li>
 			{% if g.courses %}
 				{% for course in g.courses %}
 					<li>
-						<a href="{{ url_for('course', cid=course['cid']) }}">
+						<a href="{{ url_for('view_course', cid=course['cid']) }}">
 							{{ course['name'] }}
 						</a>
 					</li>
 				{% endfor %}
 			{% endif %}
-			<li><a href="{{ url_for('logout') }}">{{ g.user['name'] }}</a></li>
+			<li><a href="{{ url_for('view_logout') }}">{{ g.user['name'] }}</a></li>
 		</ul>
 	</div>
 </nav>

@@ -1,6 +1,6 @@
-import flask, sqlite3
+import sqlite3
 
-class Database:
+class Database(object):
 	def __init__(self, path):
 		self.path = path
 		self._connection = None
@@ -18,20 +18,20 @@ class Database:
 
 	def query(self, query, **kwargs):
 		cur = self.connect().execute(query, kwargs)
-		rv = cur.fetchall()
+		rows = cur.fetchall()
 		cur.close()
-		return rv
+		return rows
 
 	def queryone(self, query, **kwargs):
-		rv = self.query(query, **kwargs)
-		return (rv[0] if rv else None)
+		rows = self.query(query, **kwargs)
+		return (rows[0] if rows else None)
 
 	def execute(self, query, **kwargs):
 		cur = self.connect().execute(query, kwargs)
-		rv = cur.fetchall()
-		id = cur.lastrowid
+		rows = cur.fetchall()
+		index = cur.lastrowid
 		cur.close()
-		return id
+		return index
 
 	def executescript(self, query):
 		self.connect().executescript(query)

@@ -1,6 +1,6 @@
 import flask
-from werkzeug.contrib.fixers import ProxyFix
 from flaskext.markdown import Markdown
+from werkzeug.contrib.fixers import ProxyFix
 
 # Create a Flask object
 app = flask.Flask(__name__)

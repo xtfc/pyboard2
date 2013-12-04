@@ -1,22 +1,12 @@
-import flask, os, time
-from datetime import datetime
+import flask
+import os
+import time
 from flask import g, request, session
 from functools import wraps
-from werkzeug import secure_filename
 from pyboard.app import app
 from pyboard.db import Database
-
-def open_sql(filename):
-	with open(os.path.join('sql', filename + '.sql')) as f:
-		return f.read()
-
-def group(items, key):
-	groups = dict()
-	for item in items:
-		if item[key] not in groups:
-			groups[item[key]] = []
-		groups[item[key]].append(item)
-	return groups
+from pyboard.util import open_sql, group
+from werkzeug.utils import secure_filename
 
 def check_auth(username, password):
 	if app.debug:
@@ -30,7 +20,7 @@ def requires_auth(func):
 	def wrapper(*args, **kwargs):
 		if 'username' not in session:
 			flask.flash('You must be logged in to view this page')
-			return flask.redirect(flask.url_for('login'))
+			return flask.redirect(flask.url_for('view_login'))
 		return func(*args, **kwargs)
 	return wrapper
 
@@ -44,7 +34,7 @@ def requires_level(level):
 				cid=request.view_args['cid'])
 			if perm is None:
 				flask.flash('You do not have permission to view this page')
-				return flask.redirect(flask.url_for('dashboard'))
+				return flask.redirect(flask.url_for('view_dashboard'))
 			return func(*args, **kwargs)
 		return wrapper
 	return outer_wrapper
@@ -61,13 +51,12 @@ def setup():
 
 @app.teardown_request
 def teardown(exception):
-	db = getattr(g, 'db', None)
-	if db is not None:
-		db.close()
+	if getattr(g, 'db', None) is not None:
+		g.db.close()
 
 @app.route('/')
 @requires_auth
-def dashboard():
+def view_dashboard():
 	assignments = g.db.query(open_sql('assignments-future_uid'), uid=g.user['uid'])
 	messages = g.db.query(open_sql('messages_uid-limit'), uid=g.user['uid'], limit=4)
 
@@ -79,7 +68,7 @@ def dashboard():
 
 @app.route('/course/<cid>')
 @requires_auth
-def course(cid):
+def view_course(cid):
 	# ensure the user is enrolled in this course
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
 		uid=g.user['uid'],
@@ -87,7 +76,7 @@ def course(cid):
 
 	if entry is None:
 		flask.flash('You are not enrolled in that course.')
-		return flask.redirect(flask.url_for('dashboard'))
+		return flask.redirect(flask.url_for('view_dashboard'))
 
 	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=cid)
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
@@ -108,7 +97,7 @@ def course(cid):
 @app.route('/course/<cid>/assignment', methods=['GET', 'POST'])
 @requires_auth
 @requires_level(2)
-def assignment_new(cid):
+def view_new_assignment(cid):
 	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=cid)
 	entry = g.db.queryone('SELECT * FROM entries WHERE uid=:uid AND cid=:cid',
 		uid=g.user['uid'], cid=cid)
@@ -127,11 +116,11 @@ def assignment_new(cid):
 				body=request.form['body'],
 				due=request.form['due'])
 		g.db.commit()
-		return flask.redirect(flask.url_for('assignment', aid=assignment))
+		return flask.redirect(flask.url_for('view_assignment', aid=assignment))
 
 @app.route('/assignment/<aid>')
 @requires_auth
-def assignment(aid):
+def view_assignment(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
 	course = g.db.queryone('SELECT * FROM courses WHERE cid=:cid', cid=assignment['cid'])
 
@@ -142,7 +131,7 @@ def assignment(aid):
 
 	if entry is None:
 		flask.flash('You are not enrolled in that course.')
-		return flask.redirect(flask.url_for('dashboard'))
+		return flask.redirect(flask.url_for('view_dashboard'))
 
 	grades = g.db.query(open_sql('grades_aid'), aid=aid)
 
@@ -157,16 +146,16 @@ def assignment(aid):
 
 @app.route('/assignment/<aid>/submit', methods=['POST'])
 @requires_auth
-def submit(aid):
+def view_submit(aid):
 	assignment = g.db.queryone('SELECT * FROM assignments WHERE aid=:aid', aid=aid)
 	if assignment['due'] <= time.time():
 		flask.flash('Unable to submit past the due date')
-		return flask.redirect(flask.url_for('assignment', aid=aid))
+		return flask.redirect(flask.url_for('view_assignment', aid=aid))
 
 	ufile = request.files['submission']
 	if not ufile:
 		flask.flash('No file selected')
-		return flask.redirect(flask.url_for('assignment', aid=aid))
+		return flask.redirect(flask.url_for('view_assignment', aid=aid))
 
 	filename = secure_filename(ufile.filename)
 
@@ -182,28 +171,28 @@ def submit(aid):
 		ufile.save(upload_file)
 	except:
 		flask.flash('There was an error processing your submission. Please try again.')
-		return flask.redirect(flask.url_for('assignment', aid=aid))
+		return flask.redirect(flask.url_for('view_assignment', aid=aid))
 
 	g.db.commit()
 	flask.flash('Submission received')
 
-	return flask.redirect(flask.url_for('assignment', aid=aid))
+	return flask.redirect(flask.url_for('view_assignment', aid=aid))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def view_login():
 	if request.method == 'GET':
 		return flask.render_template('login.html')
 
 	if check_auth(request.form['username'], request.form['password']):
 		session['username'] = request.form['username']
 		flask.flash('Logged in as {}'.format(session['username']))
-		return flask.redirect(flask.url_for('dashboard'))
+		return flask.redirect(flask.url_for('view_dashboard'))
 
 	flask.flash('Invalid login')
-	return flask.redirect(flask.url_for('login'))
+	return flask.redirect(flask.url_for('view_login'))
 
 @app.route('/logout')
-def logout():
+def view_logout():
 	session.pop('username', None)
 	flask.flash('Logged out')
-	return flask.redirect(flask.url_for('login'))
+	return flask.redirect(flask.url_for('view_login'))
