@@ -6,7 +6,7 @@ CREATE TABLE users (
 	email TEXT NOT NULL
 );
 
-drop table if exists courses;
+DROP TABLE IF EXISTS courses;
 CREATE TABLE courses (
 	cid INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL
